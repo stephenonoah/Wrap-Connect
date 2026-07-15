@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   Check, User, Mail, Phone, MapPin, Car, Info,
- ShieldCheck, Banknote, Calendar
+  ShieldCheck, Banknote, Calendar
 } from "lucide-react";
 
 export default function Apply() {
@@ -17,14 +17,38 @@ export default function Apply() {
     setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.terms) return;
+    
     setFormStatus("submitting");
-    setTimeout(() => {
+
+    try {
+      // Send data to the Vercel serverless function
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
+      // Show success UI and clear the form
       setFormStatus("success");
-      setForm({ name: "", email: "", phone: "", location: "", year: "", make: "", model: "", terms: false });
-    }, 1500);
+      setForm({ 
+        name: "", email: "", phone: "", location: "", 
+        year: "", make: "", model: "", terms: false 
+      });
+
+    } catch (error) {
+      console.error("Submission error:", error);
+      setFormStatus("idle");
+      alert("There was an error submitting your application. Please try again.");
+    }
   };
 
   return (
