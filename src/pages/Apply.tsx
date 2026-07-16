@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import {
   Check, User, Mail, Phone, MapPin, Car, Info,
-  Banknote, Calendar, ArrowRight, ArrowLeft, Home, Map, Route
+  Calendar, ArrowRight, ArrowLeft, Home, Map, Route, Briefcase
 } from "lucide-react";
 
 // Initialize Supabase using Vite Environment Variables
@@ -16,7 +16,8 @@ export default function Apply() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [form, setForm] = useState({
     name: "", email: "", phone: "", address: "", city: "", state: "",
-    type: "", make: "", year: "", miles: "", wrapType: "",
+    age: "", gender: "", job: "",
+    type: "", make: "", year: "", miles: "", license: "", wrapType: "",
     terms: false,
   });
 
@@ -51,10 +52,14 @@ export default function Apply() {
           home_address: form.address,
           city: form.city,
           state: form.state,
+          age: form.age,
+          gender: form.gender,
+          current_job: form.job,
           vehicle_type: form.type,
           vehicle_make: form.make,
           vehicle_year: form.year,
           average_miles: form.miles,
+          has_license: form.license,
           wrap_preference: form.wrapType
         }]);
 
@@ -72,10 +77,14 @@ export default function Apply() {
             address: form.address,
             city: form.city,
             state: form.state,
+            age: form.age,
+            gender: form.gender,
+            job: form.job,
             type: form.type,
             make: form.make,
             year: form.year,
             miles: form.miles,
+            license: form.license,
             wrapType: form.wrapType
           })
         });
@@ -88,7 +97,8 @@ export default function Apply() {
       setStep(1);
       setForm({ 
         name: "", email: "", phone: "", address: "", city: "", state: "", 
-        type: "", make: "", year: "", miles: "", wrapType: "", terms: false 
+        age: "", gender: "", job: "", type: "", make: "", year: "", 
+        miles: "", license: "", wrapType: "", terms: false 
       });
 
     } catch (error) {
@@ -168,9 +178,30 @@ export default function Apply() {
                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                       <h3 className="text-xl font-bold mb-4 text-blue-400">Basic Information</h3>
                       <IconField icon={User} placeholder="Full Name" name="name" value={form.name} onChange={handleChange} />
-                      <IconField icon={Mail} placeholder="Email Address" type="email" name="email" value={form.email} onChange={handleChange} />
-                      <IconField icon={Phone} placeholder="Phone Number" type="tel" name="phone" value={form.phone} onChange={handleChange} />
-                      <IconField icon={Home} placeholder="Home Address" name="address" value={form.address} onChange={handleChange} />
+                      <div className="grid grid-cols-2 gap-4">
+                        <IconField icon={Mail} placeholder="Email Address" type="email" name="email" value={form.email} onChange={handleChange} />
+                        <IconField icon={Phone} placeholder="Phone Number" type="tel" name="phone" value={form.phone} onChange={handleChange} />
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <IconField icon={User} placeholder="Age" name="age" value={form.age} onChange={handleChange} type="number" />
+                        <div className="flex items-center gap-4 bg-slate-900/50 rounded-xl border border-slate-600 px-4">
+                          <label className="flex items-center gap-2 cursor-pointer py-4">
+                            <input type="radio" name="gender" value="Male" checked={form.gender === "Male"} onChange={handleChange} required className="w-4 h-4 accent-blue-500 bg-slate-800 border-slate-600" />
+                            <span className="text-slate-300 font-bold text-sm">Male</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer py-4">
+                            <input type="radio" name="gender" value="Female" checked={form.gender === "Female"} onChange={handleChange} required className="w-4 h-4 accent-blue-500 bg-slate-800 border-slate-600" />
+                            <span className="text-slate-300 font-bold text-sm">Female</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <IconField icon={Briefcase} placeholder="Current Job" name="job" value={form.job} onChange={handleChange} />
+                      
+                      <div className="pt-2">
+                        <IconField icon={Home} placeholder="Home Address" name="address" value={form.address} onChange={handleChange} />
+                      </div>
                       <div className="grid grid-cols-2 gap-4">
                         <IconField icon={MapPin} placeholder="City" name="city" value={form.city} onChange={handleChange} />
                         <IconField icon={Map} placeholder="State" name="state" value={form.state} onChange={handleChange} />
@@ -197,18 +228,30 @@ export default function Apply() {
                       </div>
 
                       <div className="pt-4 border-t border-slate-700">
-                        <label className="block text-sm font-bold text-slate-300 mb-4">Which type of vehicle wrap would you prefer?</label>
+                        <label className="block text-sm font-bold text-slate-300 mb-4">Do you have a valid Driver's License?</label>
+                        <div className="flex gap-4">
+                          {["Yes", "No"].map((option) => (
+                            <label key={option} className="flex-1 flex items-center gap-3 cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-600 hover:border-blue-500 transition-colors">
+                              <input 
+                                type="radio" name="license" value={option} 
+                                checked={form.license === option} onChange={handleChange} 
+                                required className="w-5 h-5 accent-blue-500 bg-slate-800 border-slate-600" 
+                              />
+                              <span className="text-white font-medium">{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-700">
+                        <label className="block text-sm font-bold text-slate-300 mb-4">Brand Wrap Size Preference:</label>
                         <div className="space-y-3">
-                          {["Full vehicle wrap", "Half vehicle wrap", "Door-side wrap"].map((option) => (
+                          {["Full", "Half", "Doors only"].map((option) => (
                             <label key={option} className="flex items-center gap-4 cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-600 hover:border-blue-500 transition-colors">
                               <input 
-                                type="radio" 
-                                name="wrapType" 
-                                value={option} 
-                                checked={form.wrapType === option} 
-                                onChange={handleChange} 
-                                required 
-                                className="w-5 h-5 accent-blue-500 bg-slate-800 border-slate-600" 
+                                type="radio" name="wrapType" value={option} 
+                                checked={form.wrapType === option} onChange={handleChange} 
+                                required className="w-5 h-5 accent-blue-500 bg-slate-800 border-slate-600" 
                               />
                               <span className="text-white font-medium">{option}</span>
                             </label>
@@ -224,11 +267,12 @@ export default function Apply() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                       <h3 className="text-xl font-bold mb-4 text-blue-400">Final Review</h3>
                       <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 space-y-3 text-slate-300">
-                         <p><strong className="text-white">Applicant:</strong> {form.name}</p>
+                         <p><strong className="text-white">Applicant:</strong> {form.name} ({form.age}, {form.gender})</p>
                          <p><strong className="text-white">Location:</strong> {form.city}, {form.state}</p>
+                         <p><strong className="text-white">Job:</strong> {form.job}</p>
                          <p><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.type}</p>
-                         <p><strong className="text-white">Driving:</strong> ~{form.miles} miles/week</p>
-                         <p><strong className="text-white">Preference:</strong> {form.wrapType}</p>
+                         <p><strong className="text-white">License:</strong> {form.license}</p>
+                         <p><strong className="text-white">Preference:</strong> {form.wrapType} Wrap</p>
                       </div>
 
                       <div className="pt-4">
@@ -256,7 +300,7 @@ export default function Apply() {
                       </button>
                     ) : (
                       <button type="submit" disabled={!form.terms || formStatus === "submitting"} className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-green-500 text-white font-extrabold text-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-green-500/20">
-                        {formStatus === "submitting" ? "Submitting securely..." : "Submit Application"}
+                        {formStatus === "submitting" ? "Submitting..." : "Submit Application"}
                       </button>
                     )}
                   </div>
@@ -289,16 +333,6 @@ export default function Apply() {
                   <div>
                     <div className="font-bold text-slate-900 text-lg">2. We Contact You</div>
                     <div className="text-sm text-slate-500 font-medium">If matched to a campaign, we reach out within 2-5 days.</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <Banknote className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-slate-900 text-lg">3. Get Started</div>
-                    <div className="text-sm text-slate-500 font-medium">Free professional installation and you begin earning.</div>
                   </div>
                 </div>
               </div>

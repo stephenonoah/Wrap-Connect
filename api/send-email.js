@@ -1,17 +1,15 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, phone, address, city, state, type, make, year, miles, wrapType } = req.body;
+  const { name, email, phone, address, city, state, age, gender, job, type, make, year, miles, license, wrapType } = req.body;
   const brevoApiKey = process.env.BREVO_API_KEY;
 
   if (!brevoApiKey) {
     return res.status(500).json({ error: 'Brevo API key is missing from Environment Variables' });
   }
 
-  // Construct the email data
   const payload = {
     sender: { 
       name: "WrapConnect", 
@@ -43,12 +41,24 @@ export default async function handler(req, res) {
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${phone}</td>
             </tr>
             <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Age & Gender:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${age} yrs, ${gender}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Current Job:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${job}</td>
+            </tr>
+            <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Address:</strong></td>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${address}<br/>${city}, ${state}</td>
             </tr>
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Vehicle:</strong></td>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${year} ${make} ${type}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Driver License:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${license}</td>
             </tr>
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Avg. Mileage:</strong></td>
