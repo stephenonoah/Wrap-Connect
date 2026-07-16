@@ -27,7 +27,7 @@ export default function Home() {
         {/* NAVBAR */}
         <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm" : "bg-white border-b border-transparent"}`}>
           <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
-            <Link to="/" className="text-2xl font-black tracking-tight flex items-center gap-1">
+            <Link to="/" onClick={() => window.scrollTo(0, 0)} className="text-2xl font-black tracking-tight flex items-center gap-1">
               <span className="text-slate-900">Wrap</span>
               <span className="text-blue-600">Connect</span>
             </Link>
@@ -37,7 +37,7 @@ export default function Home() {
               <a href="#legitimacy" className="hover:text-blue-600 transition-colors">Legitimacy</a>
               <a href="#reviews" className="hover:text-blue-600 transition-colors">Reviews</a>
             </div>
-            <Link to="/apply" className="hidden md:inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
+            <Link to="/apply" onClick={() => window.scrollTo(0, 0)} className="hidden md:inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
               Apply Now <ArrowRight className="w-4 h-4" />
             </Link>
             <button className="md:hidden text-slate-900" onClick={() => setMenuOpen(!menuOpen)}>
@@ -50,7 +50,7 @@ export default function Home() {
               <a href="#how" onClick={() => setMenuOpen(false)}>How It Works</a>
               <a href="#legitimacy" onClick={() => setMenuOpen(false)}>Legitimacy</a>
               <a href="#reviews" onClick={() => setMenuOpen(false)}>Reviews</a>
-              <Link to="/apply" onClick={() => setMenuOpen(false)} className="inline-flex items-center justify-center px-5 py-3 rounded-full bg-blue-600 text-white">Apply Now</Link>
+              <Link to="/apply" onClick={() => { setMenuOpen(false); window.scrollTo(0, 0); }} className="inline-flex items-center justify-center px-5 py-3 rounded-full bg-blue-600 text-white">Apply Now</Link>
             </div>
           )}
         </nav>
@@ -76,7 +76,7 @@ export default function Home() {
                 Drivers Earn. Brands Get Seen. Everyone Wins. WrapConnect connects businesses with everyday drivers through professional vehicle advertising campaigns.
               </p>
               <div className="mt-8 flex gap-4 flex-wrap">
-                <Link to="/apply" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/30">
+                <Link to="/apply" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/30">
                   Apply to Drive <ArrowRight className="w-5 h-5" />
                 </Link>
                 <a href="#how" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 backdrop-blur-md transition">
@@ -181,7 +181,7 @@ export default function Home() {
               </p>
               
               <div className="mt-10">
-                 <Link to="/apply" className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/30">
+                 <Link to="/apply" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/30">
                     Apply Today <ArrowRight className="w-5 h-5" />
                  </Link>
               </div>
@@ -328,7 +328,7 @@ export default function Home() {
               Turn your everyday driving into a reliable stream of extra income.
             </p>
             <div className="mt-10 flex justify-center">
-              <Link to="/apply" className="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-white text-blue-600 font-bold text-lg hover:bg-slate-50 transition shadow-xl shadow-slate-900/20">
+              <Link to="/apply" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-white text-blue-600 font-bold text-lg hover:bg-slate-50 transition shadow-xl shadow-slate-900/20">
                 Apply to Drive Now <ArrowRight className="w-6 h-6" />
               </Link>
             </div>
