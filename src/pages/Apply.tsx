@@ -51,31 +51,38 @@ export default function Apply() {
     try {
       let photoUrl = "";
 
-      // 1. Compress & Upload Vehicle Photo to Supabase Storage (With Failsafe)
+      // 1. Extreme Compression & Upload to Cloudinary
       if (photo) {
         try {
+          // Compress to ~100KB and max 800px dimensions
           const compressionOptions = {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1920,
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 800,
             useWebWorker: true,
           };
 
           const compressedFile = await imageCompression(photo, compressionOptions);
-          const fileExt = compressedFile.name.split('.').pop();
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
           
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from("vehicle-photos")
-            .upload(fileName, compressedFile);
+          // Prepare Cloudinary Payload
+          const formData = new FormData();
+          formData.append("file", compressedFile);
+          formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
 
-          if (uploadError) {
-            console.warn("Storage upload failed (possibly full). Proceeding with text-only data.");
-            photoUrl = "Storage Full / Failed Upload";
-          } else if (uploadData) {
-            const { data: publicUrlData } = supabase.storage
-              .from("vehicle-photos")
-              .getPublicUrl(uploadData.path);
-            photoUrl = publicUrlData.publicUrl;
+          const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+          const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+          
+          // Upload directly to Cloudinary
+          const uploadRes = await fetch(cloudinaryUrl, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadRes.ok) {
+            console.warn("Cloudinary upload failed. Proceeding with text-only data.");
+            photoUrl = "Upload Failed";
+          } else {
+            const cloudData = await uploadRes.json();
+            photoUrl = cloudData.secure_url; // Grab the live Cloudinary URL
           }
         } catch (imageError) {
           console.warn("Image processing failed locally. Proceeding with text-only data.");
@@ -83,7 +90,7 @@ export default function Apply() {
         }
       }
 
-      // 2. Save Application Data to Supabase Database
+      // 2. Save Application Data to Supabase Database (Using the Cloudinary URL)
       const [city = form.location, state = ""] = form.location.split(",").map(s => s.trim());
 
       const { error: dbError } = await supabase
@@ -121,7 +128,6 @@ export default function Apply() {
           })
         });
       } catch (emailError) {
-        // Log it but don't stop the success screen since DB insert worked
         console.error("Failed to send email notification:", emailError);
       }
 
