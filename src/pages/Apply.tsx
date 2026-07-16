@@ -15,7 +15,7 @@ export default function Apply() {
   const [step, setStep] = useState(1);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", address: "", city: "", state: "",
+    name: "", email: "", phone: "", address: "", city: "", state: "", zipcode: "",
     age: "", gender: "", job: "",
     type: "", make: "", year: "", miles: "", license: "", wrapType: "",
     terms: false,
@@ -32,15 +32,22 @@ export default function Apply() {
     }
   };
 
-  // Validation Checks
-  const isStep1Valid = !!(form.name && form.email && form.phone && form.age && form.gender && form.job && form.address && form.city && form.state);
+  // Validation Checks (Now requires zipcode)
+  const isStep1Valid = !!(form.name && form.email && form.phone && form.age && form.gender && form.job && form.address && form.city && form.state && form.zipcode);
   const isStep2Valid = !!(form.type && form.make && form.year && form.miles && form.license && form.wrapType);
   const canContinue = step === 1 ? isStep1Valid : (step === 2 ? isStep2Valid : false);
 
   const nextStep = () => {
-    if (canContinue) setStep((prev) => Math.min(prev + 1, 3));
+    if (canContinue) {
+      setStep((prev) => Math.min(prev + 1, 3));
+      window.scrollTo(0, 0);
+    }
   };
-  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+  
+  const prevStep = () => {
+    setStep((prev) => Math.max(prev - 1, 1));
+    window.scrollTo(0, 0);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -59,6 +66,7 @@ export default function Apply() {
           home_address: form.address,
           city: form.city,
           state: form.state,
+          zip_code: form.zipcode, // Maps to Supabase zip_code column
           age: form.age,
           gender: form.gender,
           current_job: form.job,
@@ -84,6 +92,7 @@ export default function Apply() {
             address: form.address,
             city: form.city,
             state: form.state,
+            zipcode: form.zipcode, // Sent to email API
             age: form.age,
             gender: form.gender,
             job: form.job,
@@ -103,10 +112,11 @@ export default function Apply() {
       setFormStatus("success");
       setStep(1);
       setForm({ 
-        name: "", email: "", phone: "", address: "", city: "", state: "", 
+        name: "", email: "", phone: "", address: "", city: "", state: "", zipcode: "",
         age: "", gender: "", job: "", type: "", make: "", year: "", 
         miles: "", license: "", wrapType: "", terms: false 
       });
+      window.scrollTo(0, 0);
 
     } catch (error) {
       console.error("Submission error:", error);
@@ -215,9 +225,12 @@ export default function Apply() {
                       <div className="pt-2">
                         <IconField icon={Home} placeholder="Home Address" name="address" value={form.address} onChange={handleChange} />
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      
+                      {/* 3-Column Grid for City, State, Zipcode */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <IconField icon={MapPin} placeholder="City" name="city" value={form.city} onChange={handleChange} />
                         <IconField icon={Map} placeholder="State" name="state" value={form.state} onChange={handleChange} />
+                        <IconField icon={MapPin} placeholder="Zipcode" name="zipcode" value={form.zipcode} onChange={handleChange} />
                       </div>
                     </div>
                   )}
@@ -282,7 +295,7 @@ export default function Apply() {
                       <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 space-y-3 text-slate-300">
                         <p><strong className="text-white">Applicant:</strong> {form.name} ({form.age}, {form.gender})</p>
                         <p><strong className="text-white">Contact:</strong> {form.email} | {form.phone}</p>
-                        <p><strong className="text-white">Address:</strong> {form.address}, {form.city}, {form.state}</p>
+                        <p><strong className="text-white">Address:</strong> {form.address}, {form.city}, {form.state} {form.zipcode}</p>
                         <p><strong className="text-white">Job:</strong> {form.job}</p>
                         <p><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.type}</p>
                         <p><strong className="text-white">Usage:</strong> {form.miles} miles/week</p>

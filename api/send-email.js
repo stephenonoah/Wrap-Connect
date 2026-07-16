@@ -3,7 +3,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, phone, address, city, state, age, gender, job, type, make, year, miles, license, wrapType } = req.body;
+  // Destructure zipcode instead of zipCode
+  const { 
+    name, email, phone, address, city, state, zipcode, 
+    age, gender, job, type, make, year, miles, license, wrapType 
+  } = req.body;
+  
   const brevoApiKey = process.env.BREVO_API_KEY;
 
   if (!brevoApiKey) {
@@ -50,7 +55,7 @@ export default async function handler(req, res) {
             </tr>
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Address:</strong></td>
-              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${address}<br/>${city}, ${state}</td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${address}<br/>${city}, ${state} ${zipcode}</td>
             </tr>
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Vehicle:</strong></td>
