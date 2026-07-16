@@ -267,12 +267,14 @@ export default function Apply() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                       <h3 className="text-xl font-bold mb-4 text-blue-400">Final Review</h3>
                       <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 space-y-3 text-slate-300">
-                         <p><strong className="text-white">Applicant:</strong> {form.name} ({form.age}, {form.gender})</p>
-                         <p><strong className="text-white">Location:</strong> {form.city}, {form.state}</p>
-                         <p><strong className="text-white">Job:</strong> {form.job}</p>
-                         <p><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.type}</p>
-                         <p><strong className="text-white">License:</strong> {form.license}</p>
-                         <p><strong className="text-white">Preference:</strong> {form.wrapType} Wrap</p>
+                        <p><strong className="text-white">Applicant:</strong> {form.name} ({form.age}, {form.gender})</p>
+                        <p><strong className="text-white">Contact:</strong> {form.email} | {form.phone}</p>
+                        <p><strong className="text-white">Address:</strong> {form.address}, {form.city}, {form.state}</p>
+                        <p><strong className="text-white">Job:</strong> {form.job}</p>
+                        <p><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.type}</p>
+                        <p><strong className="text-white">Usage:</strong> {form.miles} miles/week</p>
+                        <p><strong className="text-white">License:</strong> {form.license}</p>
+                        <p><strong className="text-white">Preference:</strong> {form.wrapType} Wrap</p>
                       </div>
 
                       <div className="pt-4">
@@ -312,37 +314,48 @@ export default function Apply() {
 
           {/* RIGHT: WHAT HAPPENS NEXT CARD */}
           <div className="lg:col-span-5 relative z-20 mt-10 lg:mt-0">
-            <div className="bg-[#0B1528] rounded-[2rem] p-8 shadow-2xl border border-slate-800 sticky top-32">
-              <h2 className="text-white text-3xl font-extrabold mb-8">What<br/>Happens<br/>Next?</h2>
+            <div className="bg-[#0B1528] rounded-[2rem] p-8 lg:p-10 sticky top-32">
+              <h2 className="text-white text-4xl lg:text-5xl font-extrabold mb-10 leading-[1.1] tracking-tight">
+                What<br/>Happens<br/>Next?
+              </h2>
               
-              <div className="bg-white rounded-2xl p-6 lg:p-8 space-y-8">
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+              <div className="bg-white rounded-[2rem] p-8 lg:p-10 space-y-10 shadow-xl">
+                {/* Step 1 */}
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <User className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">1. We Review</div>
-                    <div className="text-sm text-slate-500 font-medium">We assess your vehicle and location details.</div>
+                    <div className="font-bold text-slate-900 text-[1.15rem] mb-1">1. We Review</div>
+                    <div className="text-[15px] text-slate-500 font-medium leading-snug">
+                      We assess your vehicle and location details.
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                {/* Step 2 */}
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <Phone className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">2. We Contact You</div>
-                    <div className="text-sm text-slate-500 font-medium">If matched to a campaign, we reach out within 2-5 days.</div>
+                    <div className="font-bold text-slate-900 text-[1.15rem] mb-1">2. We Contact You</div>
+                    <div className="text-[15px] text-slate-500 font-medium leading-snug">
+                      If matched to a campaign, we reach out within 2-5 days.
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                {/* Step 3 */}
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <Banknote className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">3. Get Started</div>
-                    <div className="text-sm text-slate-500 font-medium">Free professional installation and you begin earning.</div>
+                    <div className="font-bold text-slate-900 text-[1.15rem] mb-1">3. Get Started</div>
+                    <div className="text-[15px] text-slate-500 font-medium leading-snug">
+                      Free professional installation and you begin earning.
+                    </div>
                   </div>
                 </div>
               </div>
