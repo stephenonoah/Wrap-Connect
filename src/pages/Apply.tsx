@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import {
   Check, User, Mail, Phone, MapPin, Car, Info,
-  Calendar, ArrowRight, ArrowLeft, Home, Map, Route, Briefcase
+  Banknote, Calendar, ArrowRight, ArrowLeft, Home, Map, Route, Briefcase
 } from "lucide-react";
 
 // Initialize Supabase using Vite Environment Variables
@@ -333,6 +333,16 @@ export default function Apply() {
                   <div>
                     <div className="font-bold text-slate-900 text-lg">2. We Contact You</div>
                     <div className="text-sm text-slate-500 font-medium">If matched to a campaign, we reach out within 2-5 days.</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <Banknote className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-lg">3. Get Started</div>
+                    <div className="text-sm text-slate-500 font-medium">Free professional installation and you begin earning.</div>
                   </div>
                 </div>
               </div>
