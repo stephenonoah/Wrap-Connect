@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   const payload = {
     sender: { 
       name: "WrapConnect", 
-      email: "hello@wrapconnect.online" 
+      email: "CustomerService@wrapconnect.online" 
     }, 
     to: [
       { email: "wrapconnect-applications@googlegroups.com", name: "WrapConnect Applications" }
