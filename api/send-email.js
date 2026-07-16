@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, phone, location, make, model, year, photoUrl } = req.body;
+  const { name, email, phone, address, city, state, type, make, year, miles, wrapType } = req.body;
   const brevoApiKey = process.env.BREVO_API_KEY;
 
   if (!brevoApiKey) {
@@ -43,28 +43,28 @@ export default async function handler(req, res) {
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${phone}</td>
             </tr>
             <tr>
-              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Location:</strong></td>
-              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${location}</td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Address:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${address}<br/>${city}, ${state}</td>
             </tr>
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Vehicle:</strong></td>
-              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${year} ${make} ${model}</td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${year} ${make} ${type}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Avg. Mileage:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${miles} miles/week</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;"><strong>Wrap Preference:</strong></td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">${wrapType}</td>
             </tr>
           </table>
-
-          <div style="margin-top: 32px; text-align: center;">
-            <a href="${photoUrl}" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 9999px;">
-              View Vehicle Photo
-            </a>
-            <p style="font-size: 12px; color: #64748b; margin-top: 12px;">Link: ${photoUrl}</p>
-          </div>
         </div>
       </div>
     `
   };
 
   try {
-    // Call the Brevo API
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {

@@ -1,10 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
-import imageCompression from "browser-image-compression";
 import {
   Check, User, Mail, Phone, MapPin, Car, Info,
-  Banknote, Calendar, UploadCloud, ArrowRight, ArrowLeft
+  Banknote, Calendar, ArrowRight, ArrowLeft, Home, Map, Route
 } from "lucide-react";
 
 // Initialize Supabase using Vite Environment Variables
@@ -16,11 +15,10 @@ export default function Apply() {
   const [step, setStep] = useState(1);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", location: "",
-    year: "", make: "", model: "", color: "", habits: "", 
+    name: "", email: "", phone: "", address: "", city: "", state: "",
+    type: "", make: "", year: "", miles: "", wrapType: "",
     terms: false,
   });
-  const [photo, setPhoto] = useState<File | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -30,12 +28,6 @@ export default function Apply() {
       setForm((f) => ({ ...f, [name]: target.checked }));
     } else {
       setForm((f) => ({ ...f, [name]: value }));
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setPhoto(e.target.files[0]);
     }
   };
 
@@ -49,69 +41,26 @@ export default function Apply() {
     setFormStatus("submitting");
 
     try {
-      let photoUrl = "";
-
-      // 1. Extreme Compression & Upload to Cloudinary
-      if (photo) {
-        try {
-          // Compress to ~100KB and max 800px dimensions
-          const compressionOptions = {
-            maxSizeMB: 0.1,
-            maxWidthOrHeight: 800,
-            useWebWorker: true,
-          };
-
-          const compressedFile = await imageCompression(photo, compressionOptions);
-          
-          // Prepare Cloudinary Payload
-          const formData = new FormData();
-          formData.append("file", compressedFile);
-          formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
-
-          const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-          const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-          
-          // Upload directly to Cloudinary
-          const uploadRes = await fetch(cloudinaryUrl, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!uploadRes.ok) {
-            console.warn("Cloudinary upload failed. Proceeding with text-only data.");
-            photoUrl = "Upload Failed";
-          } else {
-            const cloudData = await uploadRes.json();
-            photoUrl = cloudData.secure_url; // Grab the live Cloudinary URL
-          }
-        } catch (imageError) {
-          console.warn("Image processing failed locally. Proceeding with text-only data.");
-          photoUrl = "Processing Failed";
-        }
-      }
-
-      // 2. Save Application Data to Supabase Database (Using the Cloudinary URL)
-      const [city = form.location, state = ""] = form.location.split(",").map(s => s.trim());
-
+      // 1. Save Application Data to Supabase Database
       const { error: dbError } = await supabase
         .from("applications")
         .insert([{
           full_name: form.name,
           email_address: form.email,
           phone_number: form.phone,
-          city: city,
-          state: state || form.location,
+          home_address: form.address,
+          city: form.city,
+          state: form.state,
+          vehicle_type: form.type,
           vehicle_make: form.make,
-          vehicle_model: form.model,
           vehicle_year: form.year,
-          vehicle_color: form.color || "Not specified",
-          driving_habits: form.habits || "Not specified",
-          vehicle_photo_url: photoUrl
+          average_miles: form.miles,
+          wrap_preference: form.wrapType
         }]);
 
       if (dbError) throw dbError;
 
-      // 3. Call the Vercel API Route to trigger the Brevo Email
+      // 2. Call the Vercel API Route to trigger the Brevo Email
       try {
         await fetch('/api/send-email', {
           method: 'POST',
@@ -120,25 +69,27 @@ export default function Apply() {
             name: form.name,
             email: form.email,
             phone: form.phone,
-            location: form.location,
+            address: form.address,
+            city: form.city,
+            state: form.state,
+            type: form.type,
             make: form.make,
-            model: form.model,
             year: form.year,
-            photoUrl: photoUrl
+            miles: form.miles,
+            wrapType: form.wrapType
           })
         });
       } catch (emailError) {
         console.error("Failed to send email notification:", emailError);
       }
 
-      // 4. Reset Form on Success
+      // 3. Reset Form on Success
       setFormStatus("success");
       setStep(1);
       setForm({ 
-        name: "", email: "", phone: "", location: "", 
-        year: "", make: "", model: "", color: "", habits: "", terms: false 
+        name: "", email: "", phone: "", address: "", city: "", state: "", 
+        type: "", make: "", year: "", miles: "", wrapType: "", terms: false 
       });
-      setPhoto(null);
 
     } catch (error) {
       console.error("Submission error:", error);
@@ -219,35 +170,52 @@ export default function Apply() {
                       <IconField icon={User} placeholder="Full Name" name="name" value={form.name} onChange={handleChange} />
                       <IconField icon={Mail} placeholder="Email Address" type="email" name="email" value={form.email} onChange={handleChange} />
                       <IconField icon={Phone} placeholder="Phone Number" type="tel" name="phone" value={form.phone} onChange={handleChange} />
-                      <IconField icon={MapPin} placeholder="City, State (e.g. Austin, TX)" name="location" value={form.location} onChange={handleChange} />
+                      <IconField icon={Home} placeholder="Home Address" name="address" value={form.address} onChange={handleChange} />
+                      <div className="grid grid-cols-2 gap-4">
+                        <IconField icon={MapPin} placeholder="City" name="city" value={form.city} onChange={handleChange} />
+                        <IconField icon={Map} placeholder="State" name="state" value={form.state} onChange={handleChange} />
+                      </div>
                     </div>
                   )}
 
-                  {/* STEP 2: VEHICLE DETAILS */}
+                  {/* STEP 2: VEHICLE DETAILS & WRAP PREFERENCE */}
                   {step === 2 && (
-                    <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-                      <h3 className="text-xl font-bold mb-4 text-blue-400">Vehicle & Driving</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <IconField icon={Car} placeholder="Make (e.g. Toyota)" name="make" value={form.make} onChange={handleChange} />
-                        <IconField icon={Info} placeholder="Model (e.g. Camry)" name="model" value={form.model} onChange={handleChange} />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                         <IconField icon={Calendar} placeholder="Year (e.g. 2020)" name="year" value={form.year} onChange={handleChange} />
-                         <IconField icon={Info} placeholder="Color (e.g. Silver)" name="color" value={form.color} onChange={handleChange} />
-                      </div>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                       
-                      {/* File Upload UI */}
-                      <div className="mt-6 pt-4 border-t border-slate-700">
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Upload Vehicle Photo (Outside View)</label>
-                        <div className="relative group cursor-pointer">
-                           <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required />
-                           <div className="w-full border-2 border-dashed border-slate-600 rounded-xl p-6 text-center group-hover:border-blue-500 group-hover:bg-slate-700/50 transition-all">
-                              <UploadCloud className="w-8 h-8 text-slate-400 mx-auto mb-2 group-hover:text-blue-400" />
-                              <p className="text-slate-300 font-medium">{photo ? photo.name : "Tap to choose a clear photo of your vehicle"}</p>
-                              <p className="text-xs text-slate-500 mt-1">JPEG, PNG, WebP (Will be auto-compressed)</p>
-                           </div>
+                      <div>
+                        <h3 className="text-xl font-bold mb-4 text-blue-400">Vehicle Details</h3>
+                        <div className="grid grid-cols-1 gap-4 mb-4">
+                          <IconField icon={Car} placeholder="Vehicle Type (e.g. SUV, Sedan, Truck)" name="type" value={form.type} onChange={handleChange} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                           <IconField icon={Info} placeholder="Make (e.g. Toyota)" name="make" value={form.make} onChange={handleChange} />
+                           <IconField icon={Calendar} placeholder="Year (e.g. 2020)" name="year" value={form.year} onChange={handleChange} />
+                        </div>
+                        <div className="mt-4">
+                          <IconField icon={Route} placeholder="Average miles driven per week" name="miles" value={form.miles} onChange={handleChange} type="number" />
                         </div>
                       </div>
+
+                      <div className="pt-4 border-t border-slate-700">
+                        <label className="block text-sm font-bold text-slate-300 mb-4">Which type of vehicle wrap would you prefer?</label>
+                        <div className="space-y-3">
+                          {["Full vehicle wrap", "Half vehicle wrap", "Door-side wrap"].map((option) => (
+                            <label key={option} className="flex items-center gap-4 cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-600 hover:border-blue-500 transition-colors">
+                              <input 
+                                type="radio" 
+                                name="wrapType" 
+                                value={option} 
+                                checked={form.wrapType === option} 
+                                onChange={handleChange} 
+                                required 
+                                className="w-5 h-5 accent-blue-500 bg-slate-800 border-slate-600" 
+                              />
+                              <span className="text-white font-medium">{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
                     </div>
                   )}
 
@@ -255,10 +223,12 @@ export default function Apply() {
                   {step === 3 && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                       <h3 className="text-xl font-bold mb-4 text-blue-400">Final Review</h3>
-                      <div className="bg-slate-900 p-6 rounded-xl border border-slate-700">
-                         <p className="text-slate-300 mb-2"><strong className="text-white">Applicant:</strong> {form.name} ({form.location})</p>
-                         <p className="text-slate-300 mb-2"><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.model}</p>
-                         <p className="text-slate-300"><strong className="text-white">Photo:</strong> {photo ? "Attached ✅" : "Missing ❌"}</p>
+                      <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 space-y-3 text-slate-300">
+                         <p><strong className="text-white">Applicant:</strong> {form.name}</p>
+                         <p><strong className="text-white">Location:</strong> {form.city}, {form.state}</p>
+                         <p><strong className="text-white">Vehicle:</strong> {form.year} {form.make} {form.type}</p>
+                         <p><strong className="text-white">Driving:</strong> ~{form.miles} miles/week</p>
+                         <p><strong className="text-white">Preference:</strong> {form.wrapType}</p>
                       </div>
 
                       <div className="pt-4">
