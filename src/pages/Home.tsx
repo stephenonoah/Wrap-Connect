@@ -58,7 +58,13 @@ export default function Home() {
         {/* HERO SECTION */}
         <section id="home" className="relative w-full min-h-[85vh] md:min-h-0 md:aspect-[16/9] lg:min-h-[600px] flex items-center overflow-hidden bg-slate-900 py-24 md:py-0">
           <div className="absolute inset-0 w-full h-full">
-            <img src="/wrapconnect-brand-car.jpeg" alt="WrapConnect branded SUV" className="w-full h-full object-cover object-center" />
+            <img 
+              src="/wrapconnect-brand-car.webp" 
+              alt="WrapConnect branded SUV" 
+              fetchPriority="high"
+              loading="eager"
+              className="w-full h-full object-cover object-center" 
+            />
             <div className="absolute inset-0 bg-slate-950/70 md:bg-transparent md:bg-gradient-to-r md:from-slate-950/90 md:via-slate-950/50 md:to-transparent" />
           </div>
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-start justify-center">
@@ -81,7 +87,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* GALLERY SECTION (NEW CAMPAIGNS IN ACTION) */}
+        {/* GALLERY SECTION */}
         <section className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-6 lg:px-12 text-center">
             <span className="text-sm font-bold uppercase tracking-widest text-blue-600 font-sans">Campaigns</span>
@@ -91,21 +97,36 @@ export default function Home() {
             </p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
-                <img src="/energy-drink-car-wrap.jpeg" alt="Energy Drink Wrap" className="w-full h-48 object-cover" />
+                <img 
+                  src="/energy-drink-car-wrap.webp" 
+                  alt="Energy Drink Wrap" 
+                  loading="lazy"
+                  className="w-full h-48 object-cover" 
+                />
                 <div className="p-6 text-left">
                   <h4 className="font-bold text-slate-900 text-lg">Energy Drinks & FMCG</h4>
                   <p className="text-sm text-slate-500 mt-1 font-medium">Bold, energetic wraps that command attention on busy downtown routes.</p>
                 </div>
               </div>
               <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
-                <img src="/fitness-gym-car-wrap.png" alt="Fitness Gym Wrap" className="w-full h-48 object-cover" />
+                <img 
+                  src="/fitness-gym-car-wrap.webp" 
+                  alt="Fitness Gym Wrap" 
+                  loading="lazy"
+                  className="w-full h-48 object-cover" 
+                />
                 <div className="p-6 text-left">
                   <h4 className="font-bold text-slate-900 text-lg">Fitness & Wellness</h4>
                   <p className="text-sm text-slate-500 mt-1 font-medium">Clean, striking branding that keeps local communities active and engaged.</p>
                 </div>
               </div>
               <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
-                <img src="/tech-startup-car-wrap.png" alt="Tech Startup Wrap" className="w-full h-48 object-cover" />
+                <img 
+                  src="/tech-startup-car-wrap.webp" 
+                  alt="Tech Startup Wrap" 
+                  loading="lazy"
+                  className="w-full h-48 object-cover" 
+                />
                 <div className="p-6 text-left">
                   <h4 className="font-bold text-slate-900 text-lg">Tech Startups & Apps</h4>
                   <p className="text-sm text-slate-500 mt-1 font-medium">Modern, minimalist patterns showcasing innovative digital platforms.</p>
@@ -143,7 +164,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* HOW IT WORKS - UPDATED WITH HIGH-CONVERTING COPY */}
+        {/* HOW IT WORKS */}
         <section id="how" className="py-20 bg-white border-b border-slate-100">
           <div className="max-w-6xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -244,28 +265,72 @@ export default function Home() {
         </section>
 
         {/* REVIEWS */}
-        <section id="reviews" className="py-20 bg-white border-b border-slate-100">
+        <section id="reviews" className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-6 lg:px-12">
             <span className="text-sm font-bold uppercase tracking-widest text-blue-600">Testimonials</span>
             <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-slate-900">What they are saying.</h2>
             <div className="mt-12 grid md:grid-cols-2 gap-6">
               {[
-                { n: "David M.", l: "Seattle, WA", q: "The application process was simple, and the team kept me informed throughout the campaign. Installation was professional, and payments arrived on schedule." },
-                { n: "Amanda R.", l: "Tacoma, WA", q: "I never imagined my daily commute could generate extra income. Everything was handled professionally from start to finish." },
-                { n: "Jason T.", l: "Bellevue, WA", q: "Excellent customer service and clear communication. The wrap looked amazing, and removal was quick when the campaign ended." },
-                { n: "Marketing Director", l: "Regional Retail Company", q: "WrapConnect helped us launch a regional advertising campaign that significantly increased our local brand visibility. Their coordination and communication were outstanding." }
+                { 
+                  n: "Michael T.", 
+                  l: "Austin, TX", 
+                  q: "The application process was simple, and the team kept me informed throughout the campaign. Installation was professional, and payments arrived on schedule.",
+                  img: "/michael-t.jpg" 
+                },
+                { 
+                  n: "Sarah L.", 
+                  l: "Atlanta, GA", 
+                  q: "I never imagined my daily commute could generate extra income. Everything was handled professionally from start to finish.",
+                  img: "/sarah-l.webp" 
+                },
+                { 
+                  n: "James R.", 
+                  l: "Denver, CO", 
+                  q: "Excellent customer service and clear communication. The wrap looked amazing, and removal was quick when the campaign ended.",
+                  img: "/james-r.webp" 
+                },
+                { 
+                  n: "Elena V.", 
+                  l: "Marketing Director, Chicago, IL", 
+                  q: "WrapConnect helped us launch a regional advertising campaign that significantly increased our local brand visibility. Their coordination and communication were outstanding.",
+                  img: "/elena-v.webp" 
+                }
               ].map((r, i) => (
                 <div key={i} className="p-8 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
                   <div>
                     <div className="flex gap-1 text-blue-500 mb-4">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}</div>
                     <p className="text-slate-700 font-medium leading-relaxed">"{r.q}"</p>
                   </div>
-                  <div className="mt-6 pt-6 border-t border-slate-200">
-                    <p className="font-bold text-slate-900">{r.n}</p>
-                    <p className="text-sm text-slate-500 font-medium">{r.l}</p>
+                  <div className="mt-8 pt-6 border-t border-slate-200 flex items-center gap-4">
+                    <img 
+                      src={r.img} 
+                      alt={r.n} 
+                      loading="lazy"
+                      className="w-12 h-12 rounded-full object-cover shadow-sm border border-slate-200" 
+                    />
+                    <div>
+                      <p className="font-bold text-slate-900">{r.n}</p>
+                      <p className="text-sm text-slate-500 font-medium">{r.l}</p>
+                    </div>
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FINAL CALL TO ACTION */}
+        <section className="py-24 bg-blue-600 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-slate-900/10 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('/wrapconnect-brand-car.webp')" }}></div>
+          <div className="relative z-10 max-w-4xl mx-auto px-6">
+            <h2 className="text-3xl md:text-5xl font-extrabold text-white">Ready to start earning?</h2>
+            <p className="mt-6 text-xl text-blue-100 font-medium">
+              Turn your everyday driving into a reliable stream of extra income.
+            </p>
+            <div className="mt-10 flex justify-center">
+              <Link to="/apply" className="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-white text-blue-600 font-bold text-lg hover:bg-slate-50 transition shadow-xl shadow-slate-900/20">
+                Apply to Drive Now <ArrowRight className="w-6 h-6" />
+              </Link>
             </div>
           </div>
         </section>
