@@ -32,7 +32,14 @@ export default function Apply() {
     }
   };
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
+  // Validation Checks
+  const isStep1Valid = !!(form.name && form.email && form.phone && form.age && form.gender && form.job && form.address && form.city && form.state);
+  const isStep2Valid = !!(form.type && form.make && form.year && form.miles && form.license && form.wrapType);
+  const canContinue = step === 1 ? isStep1Valid : (step === 2 ? isStep2Valid : false);
+
+  const nextStep = () => {
+    if (canContinue) setStep((prev) => Math.min(prev + 1, 3));
+  };
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleSubmit = async (e: FormEvent) => {
@@ -149,7 +156,7 @@ export default function Apply() {
                 </button>
               </div>
             ) : (
-              <div className="bg-slate-800/50 p-8 md:p-10 rounded-[2rem] border border-slate-700">
+              <div className="bg-slate-800/50 p-6 sm:p-8 md:p-10 rounded-[2rem] border border-slate-700">
                 
                 {/* Header & Step Indicator */}
                 <div className="mb-10">
@@ -178,12 +185,12 @@ export default function Apply() {
                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                       <h3 className="text-xl font-bold mb-4 text-blue-400">Basic Information</h3>
                       <IconField icon={User} placeholder="Full Name" name="name" value={form.name} onChange={handleChange} />
-                      <div className="grid grid-cols-2 gap-4">
-                        <IconField icon={Mail} placeholder="Email Address" type="email" name="email" value={form.email} onChange={handleChange} />
-                        <IconField icon={Phone} placeholder="Phone Number" type="tel" name="phone" value={form.phone} onChange={handleChange} />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <IconField icon={Mail} placeholder="Email" type="email" name="email" value={form.email} onChange={handleChange} />
+                        <IconField icon={Phone} placeholder="Phone" type="tel" name="phone" value={form.phone} onChange={handleChange} />
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <IconField icon={User} placeholder="Age" name="age" value={form.age} onChange={handleChange} type="number" />
                         <div className="flex items-center gap-4 bg-slate-900/50 rounded-xl border border-slate-600 px-4">
                           <label className="flex items-center gap-2 cursor-pointer py-4">
@@ -202,7 +209,7 @@ export default function Apply() {
                       <div className="pt-2">
                         <IconField icon={Home} placeholder="Home Address" name="address" value={form.address} onChange={handleChange} />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <IconField icon={MapPin} placeholder="City" name="city" value={form.city} onChange={handleChange} />
                         <IconField icon={Map} placeholder="State" name="state" value={form.state} onChange={handleChange} />
                       </div>
@@ -216,19 +223,19 @@ export default function Apply() {
                       <div>
                         <h3 className="text-xl font-bold mb-4 text-blue-400">Vehicle Details</h3>
                         <div className="grid grid-cols-1 gap-4 mb-4">
-                          <IconField icon={Car} placeholder="Vehicle Type (e.g. SUV, Sedan, Truck)" name="type" value={form.type} onChange={handleChange} />
+                          <IconField icon={Car} placeholder="Vehicle Type (SUV, Sedan...)" name="type" value={form.type} onChange={handleChange} />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                           <IconField icon={Info} placeholder="Make (e.g. Toyota)" name="make" value={form.make} onChange={handleChange} />
-                           <IconField icon={Calendar} placeholder="Year (e.g. 2020)" name="year" value={form.year} onChange={handleChange} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <IconField icon={Info} placeholder="Vehicle Make" name="make" value={form.make} onChange={handleChange} />
+                           <IconField icon={Calendar} placeholder="Year" name="year" value={form.year} onChange={handleChange} />
                         </div>
                         <div className="mt-4">
-                          <IconField icon={Route} placeholder="Average miles driven per week" name="miles" value={form.miles} onChange={handleChange} type="number" />
+                          <IconField icon={Route} placeholder="Avg. Miles / Week" name="miles" value={form.miles} onChange={handleChange} type="number" />
                         </div>
                       </div>
 
                       <div className="pt-4 border-t border-slate-700">
-                        <label className="block text-sm font-bold text-slate-300 mb-4">Do you have a valid Driver's License?</label>
+                        <label className="block text-sm font-bold text-slate-300 mb-4">Valid Driver's License?</label>
                         <div className="flex gap-4">
                           {["Yes", "No"].map((option) => (
                             <label key={option} className="flex-1 flex items-center gap-3 cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-600 hover:border-blue-500 transition-colors">
@@ -244,7 +251,7 @@ export default function Apply() {
                       </div>
 
                       <div className="pt-4 border-t border-slate-700">
-                        <label className="block text-sm font-bold text-slate-300 mb-4">Brand Wrap Size Preference:</label>
+                        <label className="block text-sm font-bold text-slate-300 mb-4">Wrap Size Preference:</label>
                         <div className="space-y-3">
                           {["Full", "Half", "Doors only"].map((option) => (
                             <label key={option} className="flex items-center gap-4 cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-600 hover:border-blue-500 transition-colors">
@@ -279,7 +286,7 @@ export default function Apply() {
 
                       <div className="pt-4">
                         <label className="flex items-start gap-4 text-sm cursor-pointer bg-slate-900/50 p-4 rounded-xl border border-slate-700 hover:border-blue-500 transition-colors">
-                          <input type="checkbox" name="terms" checked={form.terms} onChange={handleChange} required className="mt-1 w-5 h-5 rounded border-slate-600 bg-slate-800 accent-blue-500" />
+                          <input type="checkbox" name="terms" checked={form.terms} onChange={handleChange} required className="mt-1 w-5 h-5 flex-shrink-0 rounded border-slate-600 bg-slate-800 accent-blue-500" />
                           <span className="text-slate-300 font-medium leading-relaxed">
                             I confirm my vehicle has original factory paint in good condition and all provided information is accurate. I agree to be contacted by WrapConnect regarding advertising opportunities.
                           </span>
@@ -297,12 +304,21 @@ export default function Apply() {
                     ) : <div></div>}
 
                     {step < 3 ? (
-                      <button type="button" onClick={nextStep} className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30">
+                      <button 
+                        type="button" 
+                        onClick={nextStep} 
+                        disabled={!canContinue}
+                        className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
                         Continue <ArrowRight className="w-4 h-4" />
                       </button>
                     ) : (
-                      <button type="submit" disabled={!form.terms || formStatus === "submitting"} className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-green-500 text-white font-extrabold text-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-green-500/20">
-                        {formStatus === "submitting" ? "Submitting..." : "Submit Application"}
+                      <button 
+                        type="submit" 
+                        disabled={!form.terms || formStatus === "submitting"} 
+                        className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-green-500 text-white font-extrabold text-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-green-500/20"
+                      >
+                        {formStatus === "submitting" ? "Submitting..." : "Submit"}
                       </button>
                     )}
                   </div>
@@ -376,7 +392,13 @@ function IconField({ icon: Icon, placeholder, name, value, onChange, type = "tex
         <Icon className="h-5 w-5 text-slate-400" />
       </div>
       <input
-        type={type} name={name} value={value} onChange={onChange} required placeholder={placeholder}
+        type={type} 
+        name={name} 
+        value={value} 
+        onChange={onChange} 
+        required 
+        placeholder={placeholder}
+        onWheel={(e) => (e.target as HTMLInputElement).blur()}
         className="w-full pl-12 pr-4 py-4 rounded-xl border border-slate-600 bg-slate-900/50 text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-bold transition-all shadow-inner"
       />
     </div>
