@@ -120,18 +120,24 @@ export default function Apply() {
       
       {/* STATIC NAVBAR */}
       <nav className="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-black tracking-tight flex items-center gap-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between">
+          <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-1">
             <span className="text-slate-900">Wrap</span>
             <span className="text-blue-600">Connect</span>
           </Link>
+          
+          {/* Middle links (Desktop only) */}
           <div className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600">
             <Link to="/" className="hover:text-blue-600 transition-colors">Home</Link>
             <Link to="/#how" className="hover:text-blue-600 transition-colors">How It Works</Link>
             <Link to="/#legitimacy" className="hover:text-blue-600 transition-colors">Legitimacy</Link>
           </div>
-          <Link to="/" className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-100 text-blue-700 text-sm font-bold hover:bg-blue-200 transition">
-            Back to Home
+
+          {/* Back to Home Button (Visible on Mobile & Desktop) */}
+          <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-2.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-bold hover:bg-blue-200 transition">
+            <Home className="w-4 h-4 md:hidden" />
+            <span className="hidden md:inline">Back to Home</span>
+            <span className="md:hidden">Home</span>
           </Link>
         </div>
       </nav>
