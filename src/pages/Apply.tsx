@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import imageCompression from "browser-image-compression";
 import {
   Check, User, Mail, Phone, MapPin, Car, Info,
-  ShieldCheck, Banknote, Calendar, UploadCloud, ArrowRight, ArrowLeft
+  Banknote, Calendar, UploadCloud, ArrowRight, ArrowLeft
 } from "lucide-react";
 
 // Initialize Supabase using Vite Environment Variables
@@ -51,33 +51,36 @@ export default function Apply() {
     try {
       let photoUrl = "";
 
-      // 1. Compress & Upload Vehicle Photo to Supabase Storage
+      // 1. Compress & Upload Vehicle Photo to Supabase Storage (With Failsafe)
       if (photo) {
-        // Client-side compression settings
-        const compressionOptions = {
-          maxSizeMB: 1,          // Compress to max 1MB
-          maxWidthOrHeight: 1920, // Max resolution
-          useWebWorker: true,
-        };
+        try {
+          const compressionOptions = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+          };
 
-        // Compress the image before uploading
-        const compressedFile = await imageCompression(photo, compressionOptions);
-        
-        const fileExt = compressedFile.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-        
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("vehicle-photos")
-          .upload(fileName, compressedFile);
-
-        if (uploadError) throw uploadError;
-        
-        // Generate Public URL for the compressed image
-        const { data: publicUrlData } = supabase.storage
-          .from("vehicle-photos")
-          .getPublicUrl(uploadData.path);
+          const compressedFile = await imageCompression(photo, compressionOptions);
+          const fileExt = compressedFile.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
           
-        photoUrl = publicUrlData.publicUrl;
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from("vehicle-photos")
+            .upload(fileName, compressedFile);
+
+          if (uploadError) {
+            console.warn("Storage upload failed (possibly full). Proceeding with text-only data.");
+            photoUrl = "Storage Full / Failed Upload";
+          } else if (uploadData) {
+            const { data: publicUrlData } = supabase.storage
+              .from("vehicle-photos")
+              .getPublicUrl(uploadData.path);
+            photoUrl = publicUrlData.publicUrl;
+          }
+        } catch (imageError) {
+          console.warn("Image processing failed locally. Proceeding with text-only data.");
+          photoUrl = "Processing Failed";
+        }
       }
 
       // 2. Save Application Data to Supabase Database
@@ -301,16 +304,6 @@ export default function Apply() {
                   <div>
                     <div className="font-bold text-slate-900 text-lg">3. Get Started</div>
                     <div className="text-sm text-slate-500 font-medium">Free professional installation and you begin earning.</div>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-slate-100 mt-6">
-                  <div className="flex items-start gap-3 bg-red-50 p-4 rounded-xl border border-red-100">
-                    <ShieldCheck className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                    <p className="text-xs text-red-900 font-medium">
-                      <strong className="block mb-1">Fraud Protection Guarantee</strong>
-                      WrapConnect will <strong className="font-bold">never</strong> ask you to pay an application fee, purchase gift cards, or send money.
-                    </p>
                   </div>
                 </div>
               </div>
