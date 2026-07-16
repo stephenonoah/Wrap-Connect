@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Check, Star, Menu, X, ShieldCheck, Wallet, Calendar, AlertCircle,
+  Check, Star, Menu, X, ShieldCheck, Wallet, Calendar,
   ArrowRight, Car, Building2, UserCircle
 } from "lucide-react";
 
@@ -58,7 +58,7 @@ export default function Home() {
         {/* HERO SECTION */}
         <section id="home" className="relative w-full min-h-[85vh] md:min-h-0 md:aspect-[16/9] lg:min-h-[600px] flex items-center overflow-hidden bg-slate-900 py-24 md:py-0">
           <div className="absolute inset-0 w-full h-full">
-            <img src="/hero.jpeg" alt="WrapConnect branded SUV" className="w-full h-full object-cover object-center" />
+            <img src="/wrapconnect-brand-car.jpeg" alt="WrapConnect branded SUV" className="w-full h-full object-cover object-center" />
             <div className="absolute inset-0 bg-slate-950/70 md:bg-transparent md:bg-gradient-to-r md:from-slate-950/90 md:via-slate-950/50 md:to-transparent" />
           </div>
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-start justify-center">
@@ -76,6 +76,40 @@ export default function Home() {
                 <a href="#how" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 backdrop-blur-md transition">
                   See how it works
                 </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* GALLERY SECTION (NEW CAMPAIGNS IN ACTION) */}
+        <section className="py-20 bg-white">
+          <div className="max-w-6xl mx-auto px-6 lg:px-12 text-center">
+            <span className="text-sm font-bold uppercase tracking-widest text-blue-600 font-sans">Campaigns</span>
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-slate-900">Wrap Types & Brands We Connect</h2>
+            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto font-medium">
+              From subtle rear window decals to vibrant, full wraps, we pair high-profile businesses with the perfect vehicles.
+            </p>
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
+                <img src="/energy-drink-car-wrap.jpeg" alt="Energy Drink Wrap" className="w-full h-48 object-cover" />
+                <div className="p-6 text-left">
+                  <h4 className="font-bold text-slate-900 text-lg">Energy Drinks & FMCG</h4>
+                  <p className="text-sm text-slate-500 mt-1 font-medium">Bold, energetic wraps that command attention on busy downtown routes.</p>
+                </div>
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
+                <img src="/fitness-gym-car-wrap.png" alt="Fitness Gym Wrap" className="w-full h-48 object-cover" />
+                <div className="p-6 text-left">
+                  <h4 className="font-bold text-slate-900 text-lg">Fitness & Wellness</h4>
+                  <p className="text-sm text-slate-500 mt-1 font-medium">Clean, striking branding that keeps local communities active and engaged.</p>
+                </div>
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
+                <img src="/tech-startup-car-wrap.png" alt="Tech Startup Wrap" className="w-full h-48 object-cover" />
+                <div className="p-6 text-left">
+                  <h4 className="font-bold text-slate-900 text-lg">Tech Startups & Apps</h4>
+                  <p className="text-sm text-slate-500 mt-1 font-medium">Modern, minimalist patterns showcasing innovative digital platforms.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -109,58 +143,87 @@ export default function Home() {
           </div>
         </section>
 
-        {/* HOW IT WORKS */}
+        {/* HOW IT WORKS - UPDATED WITH HIGH-CONVERTING COPY */}
         <section id="how" className="py-20 bg-white border-b border-slate-100">
-          <div className="max-w-6xl mx-auto px-6 lg:px-12 grid lg:grid-cols-5 gap-16">
-            <div className="lg:col-span-3">
-              <span className="text-sm font-bold uppercase tracking-widest text-blue-600">For Drivers</span>
-              <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-slate-900">Turn your daily drive into extra income.</h2>
-              <div className="mt-12 space-y-10">
-                {[
-                  { n: "01", t: "Apply", d: "Complete our online application with your vehicle details and contact information." },
-                  { n: "02", t: "Vehicle Review", d: "Our team reviews your vehicle to determine eligibility based on campaign requirements, condition, and driving habits." },
-                  { n: "03", t: "Campaign Matching", d: "When a brand selects vehicles matching your profile, we'll contact you with duration and estimated compensation." },
-                  { n: "04", t: "Professional Wrap", d: "Your vehicle is wrapped by an approved partner using high-quality materials that protect your paint." },
-                  { n: "05", t: "Get Paid", d: "After installation, receive payments according to the campaign agreement." },
-                  { n: "06", t: "Wrap Removal", d: "When the campaign ends, the wrap is professionally removed at no cost to you." }
-                ].map((step) => (
-                  <div key={step.n} className="flex gap-6">
-                    <div className="font-extrabold text-3xl text-blue-100 pt-1">{step.n}</div>
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-900">{step.t}</h3>
-                      <p className="mt-2 text-slate-600 font-medium leading-relaxed">{step.d}</p>
-                    </div>
-                  </div>
-                ))}
+          <div className="max-w-6xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-sm font-bold uppercase tracking-widest text-blue-600">How It Works</span>
+              <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">Drive Your Own Car and Get Paid!</h2>
+              <p className="mt-6 text-lg text-slate-600 font-medium leading-relaxed">
+                Do you own a car? Here's an easy way to earn extra money. We are recruiting drivers for companies that want to advertise or promote their businesses through car wrap advertising.
+              </p>
+              <p className="mt-4 text-lg text-slate-600 font-medium leading-relaxed">
+                The company places a removable advertising wrap or sticker on your car. You continue driving your car as you normally do—to work, school, shopping, or anywhere else. As you drive, the advertisement is seen by thousands of people.
+              </p>
+              <p className="mt-4 text-lg text-slate-600 font-medium leading-relaxed">
+                We connect qualified drivers with companies and help manage the application process. Your payment is based on the number of miles you drive each week.
+              </p>
+              
+              <div className="mt-10">
+                 <Link to="/apply" className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/30">
+                    Apply Today <ArrowRight className="w-5 h-5" />
+                 </Link>
               </div>
             </div>
             
-            <div className="lg:col-span-2">
-              <div className="bg-slate-900 rounded-[2rem] p-10 text-white sticky top-32 shadow-xl shadow-slate-900/10">
-                <span className="text-sm font-bold uppercase tracking-widest text-blue-400">For Businesses</span>
-                <h3 className="mt-4 text-2xl font-extrabold">Tell the world about your brand.</h3>
-                <p className="mt-4 text-slate-300 font-medium leading-relaxed">
-                  Partner with WrapConnect to launch mobile advertising campaigns that generate thousands of daily impressions. Our team handles everything:
-                </p>
-                <ul className="mt-8 space-y-4 font-medium text-slate-200">
-                  <li className="flex items-center gap-3"><Check className="w-5 h-5 text-blue-400" /> Plan your advertising campaign</li>
-                  <li className="flex items-center gap-3"><Check className="w-5 h-5 text-blue-400" /> Recruit qualified drivers</li>
-                  <li className="flex items-center gap-3"><Check className="w-5 h-5 text-blue-400" /> Coordinate professional wrapping</li>
-                  <li className="flex items-center gap-3"><Check className="w-5 h-5 text-blue-400" /> Monitor campaign progress</li>
-                  <li className="flex items-center gap-3"><Check className="w-5 h-5 text-blue-400" /> Manage driver payments</li>
+            <div className="space-y-6">
+              {/* Earnings Card */}
+              <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-xl shadow-slate-900/10">
+                 <h3 className="text-2xl font-extrabold text-blue-400 mb-8">Earning Potential</h3>
+                 <ul className="space-y-6">
+                   <li className="flex items-start gap-4">
+                     <div className="bg-blue-500/20 p-3 rounded-xl text-blue-400 shrink-0"><Wallet className="w-6 h-6" /></div>
+                     <div>
+                       <p className="font-bold text-xl">Pay Rate: $5 per mile</p>
+                     </div>
+                   </li>
+                   <li className="flex items-start gap-4">
+                     <div className="bg-blue-500/20 p-3 rounded-xl text-blue-400 shrink-0"><Check className="w-6 h-6" /></div>
+                     <div>
+                       <p className="font-bold text-xl">Over $700 per week</p>
+                       <p className="text-slate-400 font-medium mt-1 leading-snug">Depending on your weekly mileage.</p>
+                     </div>
+                   </li>
+                   <li className="flex items-start gap-4">
+                     <div className="bg-blue-500/20 p-3 rounded-xl text-blue-400 shrink-0"><Car className="w-6 h-6" /></div>
+                     <div>
+                       <p className="font-bold text-xl">No special driving required</p>
+                       <p className="text-slate-400 font-medium mt-1 leading-snug">Just drive your car as you normally would.</p>
+                     </div>
+                   </li>
+                 </ul>
+              </div>
+              
+              {/* Steps Card */}
+              <div className="bg-slate-50 border border-slate-100 rounded-[2rem] p-8 md:p-10">
+                <h3 className="font-extrabold text-slate-900 text-xl mb-6">The Process</h3>
+                <ul className="space-y-4">
+                  {[
+                      "Apply online",
+                      "Vehicle review",
+                      "Campaign matching",
+                      "Professional installation",
+                      "Get paid",
+                      "Professional wrap removal"
+                  ].map((step, i) => (
+                    <li key={i} className="flex items-center gap-4 font-bold text-slate-700">
+                      <div className="w-8 h-8 shrink-0 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">{i+1}</div>
+                      {step}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* WHAT EVERY APPLICANT SHOULD KNOW (LEGITIMACY) */}
-        <section id="legitimacy" className="py-20 bg-slate-50 border-b border-slate-100">
+        {/* LEGITIMACY */}
+        <section id="legitimacy" className="py-20 bg-slate-50 border-t border-b border-slate-100">
           <div className="max-w-6xl mx-auto px-6 lg:px-12">
             <span className="text-sm font-bold uppercase tracking-widest text-blue-600">Transparency Matters</span>
             <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-slate-900 max-w-2xl">What every applicant should know.</h2>
             
-            <div className="mt-12 grid md:grid-cols-2 gap-8">
+            <div className="mt-12 grid md:grid-cols-3 gap-8">
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
                 <Wallet className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-lg font-bold text-slate-900">No Upfront Fees</h3>
@@ -175,11 +238,6 @@ export default function Home() {
                 <Calendar className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-lg font-bold text-slate-900">Campaign Payments</h3>
                 <p className="mt-2 text-slate-600 font-medium">Compensation varies by campaign duration, vehicle type, and location. Payments are made securely on a schedule.</p>
-              </div>
-              <div className="bg-red-50 p-8 rounded-2xl shadow-sm border border-red-100">
-                <AlertCircle className="w-8 h-8 text-red-600 mb-4" />
-                <h3 className="text-lg font-bold text-red-900">Fraud Awareness</h3>
-                <p className="mt-2 text-red-800 font-medium">WrapConnect will never ask you to pay an application fee, purchase gift cards, or send money from your purse.</p>
               </div>
             </div>
           </div>
