@@ -104,9 +104,28 @@ export default function Apply() {
 
       if (dbError) throw dbError;
 
-      // 3. Optional Brevo webhook integration can go here
-      // fetch('/api/send-email', { ... })
+      // 3. Call the Vercel API Route to trigger the Brevo Email
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            location: form.location,
+            make: form.make,
+            model: form.model,
+            year: form.year,
+            photoUrl: photoUrl
+          })
+        });
+      } catch (emailError) {
+        // Log it but don't stop the success screen since DB insert worked
+        console.error("Failed to send email notification:", emailError);
+      }
 
+      // 4. Reset Form on Success
       setFormStatus("success");
       setStep(1);
       setForm({ 
